@@ -4,12 +4,20 @@ const cors = require('cors');
 const helmet = require('helmet');
 
 const app = express();
-app.use(express.json());
-app.use(cors());
-const authRoutes = require('../routes/auth'); // Ensure correct path
-app.use('/auth', authRoutes);
-app.use(helmet());
 
+// Middleware setup
+app.use(helmet()); // Security headers should be first
+app.use(cors());
+app.use(express.json());
+
+// Routes
+const authRoutes = require('../routes/auth');
+const courtRoutes = require('../routes/courts');
+
+app.use('/auth', authRoutes);
+app.use('/courts', courtRoutes);
+
+// Base route
 app.get('/', (req, res) => {
     res.send('Pickleball Court Reservation API is running...');
 });
@@ -18,7 +26,4 @@ const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-
-const courtRoutes = require('../routes/courts');
-app.use('/courts', courtRoutes);
 

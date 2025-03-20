@@ -6,17 +6,20 @@ const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 // Function to get latitude & longitude from an address
 const getCoordinates = async (address) => {
     try {
+        if (!address || typeof address !== 'string') {
+            throw new Error('Invalid address provided');
+        }
+
         const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_MAPS_API_KEY}`;
         
-        console.log("Geocoding API URL:", url);
-
         const response = await axios.get(url);
 
-        console.log("Geocoding API Full Response:", JSON.stringify(response.data, null, 2));
-
-        if (response.data.status !== "OK" || response.data.results.length === 0) {
-            console.log("Geocoding API Error:", response.data.status);
+        if (response.data.status === "ZERO_RESULTS") {
             return null;
+        }
+
+        if (response.data.status !== "OK") {
+            throw new Error(`Geocoding API Error: ${response.data.status}`);
         }
 
         return response.data.results[0].geometry.location;
@@ -26,23 +29,34 @@ const getCoordinates = async (address) => {
     }
 };
 
-
-
 // Function to find nearby pickleball courts
 const findNearbyCourts = async (latitude, longitude, radius = 5000) => {
     try {
+        // Validate coordinates
+        if (!latitude || !longitude || 
+            latitude < -90 || latitude > 90 || 
+            longitude < -180 || longitude > 180) {
+            throw new Error('Invalid coordinates provided');
+        }
+
+        // Validate radius
+        if (radius < 0 || radius > 50000) {
+            radius = 5000; // Default to 5km if invalid
+        }
+
         const response = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json`, {
             params: {
                 location: `${latitude},${longitude}`,
                 radius,
-                type: 'establishment', // Google doesn't have a "pickleball" type, so we use gym/sports
+                type: 'establishment',
                 keyword: 'pickleball',
                 key: GOOGLE_MAPS_API_KEY
             }
         });
-        
-        // 🟢 Add this debugging log to see the raw response from Google Maps API
-        console.log('Google Maps API Response:', JSON.stringify(response.data, null, 2));
+
+        if (response.data.status !== "OK") {
+            throw new Error(`Places API Error: ${response.data.status}`);
+        }
 
         return response.data.results.map(place => ({
             name: place.name,
