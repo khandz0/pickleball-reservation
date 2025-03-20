@@ -1,0 +1,49 @@
+const axios = require('axios');
+require('dotenv').config();
+
+const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
+
+// Function to get latitude & longitude from an address
+const getCoordinates = async (address) => {
+    try {
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json`, {
+            params: { address, key: GOOGLE_MAPS_API_KEY }
+        });
+
+        if (response.data.results.length === 0) {
+            return null;
+        }
+
+        return response.data.results[0].geometry.location;
+    } catch (error) {
+        console.error('Error fetching coordinates:', error.message);
+        return null;
+    }
+};
+
+// Function to find nearby pickleball courts
+const findNearbyCourts = async (latitude, longitude, radius = 5000) => {
+    try {
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json`, {
+            params: {
+                location: `${latitude},${longitude}`,
+                radius,
+                type: 'gym', // Google doesn't have a "pickleball" type, so we use gym/sports
+                keyword: 'pickleball',
+                key: GOOGLE_MAPS_API_KEY
+            }
+        });
+
+        return response.data.results.map(place => ({
+            name: place.name,
+            address: place.vicinity,
+            latitude: place.geometry.location.lat,
+            longitude: place.geometry.location.lng
+        }));
+    } catch (error) {
+        console.error('Error fetching courts:', error.message);
+        return [];
+    }
+};
+
+module.exports = { getCoordinates, findNearbyCourts };
