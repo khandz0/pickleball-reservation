@@ -28,11 +28,14 @@ const findNearbyCourts = async (latitude, longitude, radius = 5000) => {
             params: {
                 location: `${latitude},${longitude}`,
                 radius,
-                type: 'gym', // Google doesn't have a "pickleball" type, so we use gym/sports
+                type: 'establishment', // Google doesn't have a "pickleball" type, so we use gym/sports
                 keyword: 'pickleball',
                 key: GOOGLE_MAPS_API_KEY
             }
         });
+        
+        // 🟢 Add this debugging log to see the raw response from Google Maps API
+        console.log('Google Maps API Response:', JSON.stringify(response.data, null, 2));
 
         return response.data.results.map(place => ({
             name: place.name,
