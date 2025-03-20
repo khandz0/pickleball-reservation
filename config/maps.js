@@ -6,20 +6,27 @@ const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 // Function to get latitude & longitude from an address
 const getCoordinates = async (address) => {
     try {
-        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json`, {
-            params: { address, key: GOOGLE_MAPS_API_KEY }
-        });
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_MAPS_API_KEY}`;
+        
+        console.log("Geocoding API URL:", url);
 
-        if (response.data.results.length === 0) {
+        const response = await axios.get(url);
+
+        console.log("Geocoding API Full Response:", JSON.stringify(response.data, null, 2));
+
+        if (response.data.status !== "OK" || response.data.results.length === 0) {
+            console.log("Geocoding API Error:", response.data.status);
             return null;
         }
 
         return response.data.results[0].geometry.location;
     } catch (error) {
-        console.error('Error fetching coordinates:', error.message);
+        console.error("Error fetching coordinates:", error.message);
         return null;
     }
 };
+
+
 
 // Function to find nearby pickleball courts
 const findNearbyCourts = async (latitude, longitude, radius = 5000) => {
