@@ -6,6 +6,8 @@ const helmet = require('helmet');
 const app = express();
 app.use(express.json());
 app.use(cors());
+const authRoutes = require('../routes/auth'); // Ensure correct path
+app.use('/auth', authRoutes);
 app.use(helmet());
 
 app.get('/', (req, res) => {
