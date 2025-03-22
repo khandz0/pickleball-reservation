@@ -13,9 +13,18 @@ CREATE TABLE courts (
     longitude FLOAT NOT NULL
 );
 
+-- CREATE TABLE reservations (
+--     id SERIAL PRIMARY KEY,
+--     user_id INTEGER REFERENCES users(id),
+--     court_id INTEGER REFERENCES courts(id),
+--     reservation_time TIMESTAMP NOT NULL
+-- );
+
 CREATE TABLE reservations (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    court_id INTEGER REFERENCES courts(id),
-    reservation_time TIMESTAMP NOT NULL
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  court_name TEXT NOT NULL,
+  court_address TEXT NOT NULL,
+  reservation_time TIMESTAMP NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
