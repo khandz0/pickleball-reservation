@@ -13,9 +13,13 @@ app.use(express.json());
 // Routes
 const authRoutes = require('../routes/auth');
 const courtRoutes = require('../routes/courts');
+const reservationRoutes = require('../routes/reservations');
+
 
 app.use('/auth', authRoutes);
 app.use('/courts', courtRoutes);
+app.use('/reservations', reservationRoutes);
+
 
 // Base route
 app.get('/', (req, res) => {
