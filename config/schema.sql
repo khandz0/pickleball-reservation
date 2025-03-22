@@ -1,11 +1,11 @@
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password TEXT NOT NULL
 );
 
-CREATE TABLE courts (
+CREATE TABLE IF NOT EXISTS courts (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     address TEXT NOT NULL,
@@ -13,14 +13,7 @@ CREATE TABLE courts (
     longitude FLOAT NOT NULL
 );
 
--- CREATE TABLE reservations (
---     id SERIAL PRIMARY KEY,
---     user_id INTEGER REFERENCES users(id),
---     court_id INTEGER REFERENCES courts(id),
---     reservation_time TIMESTAMP NOT NULL
--- );
-
-CREATE TABLE reservations (
+CREATE TABLE IF NOT EXISTS reservations (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id),
   court_name TEXT NOT NULL,
