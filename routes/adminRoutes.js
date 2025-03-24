@@ -66,4 +66,40 @@ router.delete(
   }
 );
 
+/**
+ * DELETE /admin/users/:id
+ * Admin: Delete a user and their reservations
+ */
+router.delete(
+  "/users/:id",
+  authenticateUser,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const user_id = req.params.id;
+
+      // Check if user exists
+      const userCheck = await pool.query("SELECT * FROM users WHERE id = $1", [
+        user_id,
+      ]);
+      if (userCheck.rows.length === 0) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Delete all reservations for the user
+      await pool.query("DELETE FROM reservations WHERE user_id = $1", [
+        user_id,
+      ]);
+
+      // Delete the user
+      await pool.query("DELETE FROM users WHERE id = $1", [user_id]);
+
+      res.json({ message: "User and their reservations deleted successfully" });
+    } catch (err) {
+      console.error("Error deleting user:", err.message);
+      res.status(500).json({ message: "Server error" });
+    }
+  }
+);
+
 module.exports = router;
