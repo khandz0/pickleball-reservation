@@ -24,7 +24,6 @@ Perfect for backend development practice with authentication, access control, da
 - **PostgreSQL** – User and reservation data
 - **JWT** – User authentication
 - **Google Maps & Places API** – Location and place search
-- **Redis** _(optional)_ – Caching or rate limiting
 - **cURL** – API testing in terminal
 
 ---
@@ -57,9 +56,9 @@ server.js              # Express server entry point
 
 ### 🔐 Auth
 
-| Method | Endpoint         | Description       |
-| ------ | ---------------- | ----------------- |
-| POST   | `/auth/register` | Create a new user |
+| Method | Endpoint         | Description        |
+| ------ | ---------------- | ------------------ |
+| POST   | `/auth/register` | Create a new user  |
 | POST   | `/auth/login`    | Log in & get token |
 
 ---
@@ -75,23 +74,23 @@ server.js              # Express server entry point
 
 ### 📅 Reservations (User)
 
-| Method | Endpoint               | Description                       |
-| ------ | ---------------------- | --------------------------------- |
-| GET    | `/reservations`        | View logged-in user's reservations |
-| POST   | `/reservations`        | Create new reservation            |
-| PUT    | `/reservations/:id`    | Update reservation                |
-| DELETE | `/reservations/:id`    | Cancel reservation                |
+| Method | Endpoint            | Description                        |
+| ------ | ------------------- | ---------------------------------- |
+| GET    | `/reservations`     | View logged-in user's reservations |
+| POST   | `/reservations`     | Create new reservation             |
+| PUT    | `/reservations/:id` | Update reservation                 |
+| DELETE | `/reservations/:id` | Cancel reservation                 |
 
 ---
 
 ### 🧑‍💼 Admin
 
-| Method | Endpoint                  | Description                           |
-| ------ | ------------------------- | ------------------------------------- |
-| GET    | `/admin/reservations`     | View all reservations (admin only)    |
-| DELETE | `/admin/reservations/:id` | Delete any reservation (admin only)   |
-| GET    | `/admin/users`            | View all users (admin only)           |
-| DELETE | `/admin/users/:id`        | Delete any user (admin only)          |
+| Method | Endpoint                  | Description                         |
+| ------ | ------------------------- | ----------------------------------- |
+| GET    | `/admin/reservations`     | View all reservations (admin only)  |
+| DELETE | `/admin/reservations/:id` | Delete any reservation (admin only) |
+| GET    | `/admin/users`            | View all users (admin only)         |
+| DELETE | `/admin/users/:id`        | Delete any user (admin only)        |
 
 ---
 
