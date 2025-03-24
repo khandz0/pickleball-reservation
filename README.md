@@ -23,7 +23,7 @@ Perfect for backend development practice with authentication, access control, da
 - **Node.js** + **Express** – RESTful API framework
 - **PostgreSQL** – User and reservation data
 - **JWT** – User authentication
-- **Google Maps & Places API** – Location and place search
+- **Maps JavaScript, Geocoding & Places API** – Location and place search
 - **cURL** – API testing in terminal
 
 ---
@@ -120,6 +120,8 @@ DB_NAME=pickleball_reservations
 
 JWT_SECRET=your_jwt_secret
 GOOGLE_MAPS_API_KEY=your_google_api_key
+# On the Google Cloud Console, Create a project, then Create an API Key
+# Remember to enable Maps JavaScript, Geocoding, and Places API
 ```
 
 4. **Run the server**
@@ -147,16 +149,6 @@ curl -X POST http://localhost:5001/reservations   -H "Authorization: Bearer YOUR
     "reservation_time": "2025-04-01T10:00:00Z"
   }'
 ```
-
----
-
-## 📚 Future Ideas
-
-- Front-end UI for public and admin use
-- Add court images (via Places API photos)
-- Email confirmation (via Mailgun or SendGrid)
-- Time slot display & selection UI
-- Deploy to Railway / Render for public access
 
 ---
 
