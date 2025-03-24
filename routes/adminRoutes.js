@@ -102,4 +102,21 @@ router.delete(
   }
 );
 
+/**
+ * GET /admin/users
+ * Admin: View all users
+ */
+router.get("/users", authenticateUser, requireAdmin, async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT id, name, email, is_admin FROM users ORDER BY id"
+    );
+
+    res.json({ users: result.rows });
+  } catch (err) {
+    console.error("Error fetching users:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 module.exports = router;
