@@ -16,6 +16,19 @@ router.post("/", authenticateUser, async (req, res) => {
     if (!court_name || !court_address || !reservation_time) {
       return res.status(400).json({ message: "All fields are required" });
     }
+    // Check if the court is already booked at that time
+    const existing = await pool.query(
+      `SELECT * FROM reservations
+           WHERE court_name = $1 AND reservation_time = $2`,
+      [court_name, reservation_time]
+    );
+
+    if (existing.rows.length > 0) {
+      return res.status(409).json({
+        message:
+          "This court is already booked at that time. Please choose a different time.",
+      });
+    }
 
     const result = await pool.query(
       `INSERT INTO reservations (user_id, court_name, court_address, reservation_time)
